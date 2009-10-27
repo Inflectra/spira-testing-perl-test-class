@@ -1,7 +1,7 @@
-    #!/usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # Specify our plan, how many tests we're writing
- use Test::More tests => 8;
+ use Test::More tests => 9;
 
  # or alternately, if we don't know how many:
  # use Test::More qw(no_plan);
