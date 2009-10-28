@@ -37,7 +37,7 @@ See L<TAP::Formatter::Console>
 
 sub open_test {
     my ( $self, $test, $parser ) = @_;
-
+    
     my $class
       = $self->jobs > 1
       ? 'TAP::Formatter::Console::ParallelSession'
@@ -45,6 +45,9 @@ sub open_test {
 
     eval "require $class";
     $self->_croak($@) if $@;
+    
+    #send the results to SpiraTest before writing to the console
+    print "SPIRA Test";#=" + $test + "\n";
 
     my $session = $class->new(
         {   name       => $test,
