@@ -1,13 +1,12 @@
 #!/usr/bin/perl -w
 
 use TAP::Harness;
+use Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter;
 
 #instantiate the harness
-my %hash_args = ();
-$hash_args {"formatter_class"} = "Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter";
-my $harness = TAP::Harness->new( $hash_args );
+$formatter = Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter -> new;
+my $harness = TAP::Harness->new({ formatter => $formatter });
 
 #define the list of tests
 @test_files = ("SampleTests.pl");
  $harness->runtests(@test_files);
-

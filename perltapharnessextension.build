@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="Perl TAP::Harness Extension" default="rununittest">
+
+	<target name="rununittest" description="Runs the sample Perl TAP::Harness Tests">
+		<echo message="Running the sample Perl TAP::Harness tests"/>
+		<exec program="perl" verbose="true" workingdir="${project::get-base-directory()}" failonerror="false">
+			<arg value="SampleHarness.pl" />
+		</exec>	
+	</target>
+	
+	<target name="zipup" description="Zips up the whole application for deployment">
+		<echo message="Zipping up entire application" />
+		<zip zipfile="RubyTestUnitRunner.zip" verbose="true" comment="Ruby Test::Unit Runner for SpiraTest">
+			<fileset>
+				<include name="*.rb" />
+				<include name="*.txt" />
+			</fileset>
+		</zip>
+	</target>
+	
+</project>
