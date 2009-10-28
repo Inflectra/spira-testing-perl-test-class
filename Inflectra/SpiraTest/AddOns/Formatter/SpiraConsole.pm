@@ -1,4 +1,4 @@
-package Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter;
+package Inflectra::SpiraTest::Addons::Formatter::SpiraConsole;
 
 use strict;
 use TAP::Formatter::Console ();
@@ -10,7 +10,7 @@ use vars qw($VERSION @ISA);
 
 =head1 NAME
 
-Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter - Extends the built-in console formatter to also report the results back to SpiraTest via. web service
+Inflectra::SpiraTest::Addons::Formatter::SpiraConsole - Extends the built-in console formatter to also report the results back to SpiraTest via. web service
 
 =head1 VERSION
 
@@ -26,8 +26,8 @@ Extends the built-in console formatter to also report the results back to SpiraT
 
 =head1 SYNOPSIS
 
- use Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter;
- my $harness = Inflectra::SpiraTest::Addons::PerlExtension::SpiraConsoleFormatter->new( \%args );
+ use Inflectra::SpiraTest::Addons::Formatter::SpiraConsole;
+ my $harness = Inflectra::SpiraTest::Addons::Formatter::SpiraConsole->new( \%args );
 
 =head2 C<< open_test >>
 
@@ -36,13 +36,27 @@ See L<TAP::Formatter::Console>
 =cut
 
 
-sub open_test
-{
+sub open_test {
     my ( $self, $test, $parser ) = @_;
-    
-    $self->log("HELLO");
-    
-    my $session = $self->SUPER::open_test(@_);
+
+    my $class
+      = $self->jobs > 1
+      ? 'TAP::Formatter::Console::ParallelSession'
+      : 'Inflectra::SpiraTest::Addons::Formatter::SpiraConsole::Session';
+
+    eval "require $class";
+    $self->_croak($@) if $@;
+
+    my $session = $class->new(
+        {   name       => $test,
+            formatter  => $self,
+            parser     => $parser,
+            show_count => $self->show_count,
+        }
+    );
+
+    $session->header;
+
     return $session;
 }
 
