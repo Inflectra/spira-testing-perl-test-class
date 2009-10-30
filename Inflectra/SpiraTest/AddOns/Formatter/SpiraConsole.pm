@@ -38,11 +38,36 @@ See L<TAP::Formatter::Console>
 #Constructor
 sub new 
 {
-    my( $class, @args ) = @_;
+    my( $self, @args ) = @_;
     
-    my $self = $class->SUPER::new( @args );
+    $self->SUPER::new( @args );
 }
 
+sub open_test {
+    my ( $self, $test, $parser ) = @_;
+
+    my $class
+      = $self->jobs > 1
+      ? 'TAP::Formatter::Console::ParallelSession'
+      : 'Inflectra::SpiraTest::Addons::Formatter::SpiraConsole::Session';
+
+    eval "require $class";
+    $self->_croak($@) if $@;
+
+    my $session = $class->new(
+        {   name       => $test,
+            formatter  => $self,
+            parser     => $parser,
+            show_count => $self->show_count,
+        }
+    );
+
+    $session->header;
+
+    return $session;
+}
+
+#sends the results to SpiraTest when the execution is finished
 sub summary
 {
   my ( $self, $aggregate ) = @_;
@@ -53,16 +78,18 @@ sub summary
   #Now we need to send the results to SpiraTest
   $self->_output("\nSending Results to SpiraTest\n");
   $self->_output("----------------------------\n");
+  
+  #iterate through all the parsers
+  my @parsers = $aggregate->parsers;
+  foreach (@parsers)
+  {
+    my $parser = $_;
+    
+    #display the test name and its status
+    my $test_name = $aggregate->{"testName"};
+    my $status_name = $aggregate->{"testStatus"};
+    $self->_output("$test_name has status = $status_name\n");
+  }
 }
-
-# Used for debugging purposes only
-sub log
-{
-    my $self = shift;
-    push @_, "\n" unless grep {/\n/} @_;
-    $self->_output( @_ );
-    return $self;
-}
-
 
 1;
