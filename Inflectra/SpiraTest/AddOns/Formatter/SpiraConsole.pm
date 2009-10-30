@@ -1,7 +1,7 @@
 package Inflectra::SpiraTest::Addons::Formatter::SpiraConsole;
 
 use strict;
-use TAP::Formatter::Console ();
+use base qw(TAP::Formatter::Console);
 use POSIX qw(strftime);
 
 use vars qw($VERSION @ISA);
@@ -35,29 +35,24 @@ See L<TAP::Formatter::Console>
 
 =cut
 
+#Constructor
+sub new 
+{
+    my( $class, @args ) = @_;
+    
+    my $self = $class->SUPER::new( @args );
+}
 
-sub open_test {
-    my ( $self, $test, $parser ) = @_;
-
-    my $class
-      = $self->jobs > 1
-      ? 'TAP::Formatter::Console::ParallelSession'
-      : 'Inflectra::SpiraTest::Addons::Formatter::SpiraConsole::Session';
-
-    eval "require $class";
-    $self->_croak($@) if $@;
-
-    my $session = $class->new(
-        {   name       => $test,
-            formatter  => $self,
-            parser     => $parser,
-            show_count => $self->show_count,
-        }
-    );
-
-    $session->header;
-
-    return $session;
+sub summary
+{
+  my ( $self, $aggregate ) = @_;
+  
+  #first run the superclass functionality
+  $self->SUPER::summary($aggregate);
+  
+  #Now we need to send the results to SpiraTest
+  $self->_output("\nSending Results to SpiraTest\n");
+  $self->_output("----------------------------\n");
 }
 
 # Used for debugging purposes only

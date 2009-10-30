@@ -7,10 +7,10 @@
  # use Test::More qw(no_plan);
 
  # Check that our module compiles and can be "use"d.
- BEGIN { use_ok( 'Inflectra::SpiraTest::Addons::PerlExtension::TestMe' ); }
+ BEGIN { use_ok( 'Inflectra::SpiraTest::Addons::Samples::TestMe' ); }
 
  # Check our module can be required. Very similar test to that above.
- require_ok( 'Inflectra::SpiraTest::Addons::PerlExtension::TestMe' );
+ require_ok( 'Inflectra::SpiraTest::Addons::Samples::TestMe' );
 
  # There are a number of ways to generate the "ok" tests. These are:
  # ok: first argument is true, second argument is name of test.

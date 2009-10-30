@@ -1,4 +1,4 @@
-package Inflectra::SpiraTest::Addons::PerlExtension::TestMe;
+package Inflectra::SpiraTest::Addons::Samples::TestMe;
 
 use strict;
 use warnings;
