@@ -55,7 +55,7 @@ sub open_test {
     $self->_croak($@) if $@;
 
     my $session = $class->new(
-        {   name       => $test,
+        {  name       => $test,
             formatter  => $self,
             parser     => $parser,
             show_count => $self->show_count,
