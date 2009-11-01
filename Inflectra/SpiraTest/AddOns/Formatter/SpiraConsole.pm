@@ -79,16 +79,11 @@ sub summary
   $self->_output("\nSending Results to SpiraTest\n");
   $self->_output("----------------------------\n");
   
-  #iterate through all the parsers
-  my @parsers = $aggregate->parsers;
-  foreach (@parsers)
+  #iterate through all the results from the SpiraTest dictionary
+  my $testStatuses = $aggregate->{"testStatuses"};
+  while ( my ($test_name, $execution_status) = each(%$testStatuses) )
   {
-    my $parser = $_;
-    
-    #display the test name and its status
-    my $test_name = $aggregate->{"testName"};
-    my $status_name = $aggregate->{"testStatus"};
-    $self->_output("$test_name has status = $status_name\n");
+    $self->_output("$test_name has status = $execution_status\n");
   }
 }
 

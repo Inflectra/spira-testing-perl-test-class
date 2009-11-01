@@ -84,6 +84,9 @@ sub _initialize {
         next if 'total' eq $summary;
         $self->{"descriptions_for_$summary"} = [];
     }
+    
+    #initialize the spiratest result dictionary
+    $self->{"testStatuses"} = {};
     return $self;
 }
 
@@ -115,7 +118,8 @@ sub add
     $self->{parser_for}{$description} = $parser;
 
     #get the SpiraTest test case id and execution status from the TAP results
-    $self->{"testName"} = $description;
+    my $testStatuses = $self->{"testStatuses"};
+    
     my $executionStatusId = EXECUTION_STATUS_ID_NOT_RUN;
     if ($parser->actual_failed > 0)
     {
@@ -130,7 +134,7 @@ sub add
       #since we have todo-s and no other failures, log as blocked
       $executionStatusId = EXECUTION_STATUS_ID_BLOCKED;
     }
-    $self->{"testStatus"} = $executionStatusId;
+    $testStatuses->{$description} = $executionStatusId;
     while ( my ( $summary, $method ) = each %SUMMARY_METHOD_FOR )
     {
         # Slightly nasty. Instead we should maybe have 'cooked' accessors
