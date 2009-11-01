@@ -1,14 +1,10 @@
 #!/usr/bin/perl -w
 
-#use TAP::Harness;
 use Inflectra::SpiraTest::Addons::SpiraHarness::Harness;
-use Inflectra::SpiraTest::Addons::Formatter::SpiraConsole ;
-use Inflectra::SpiraTest::Addons::Aggregator::SpiraAggregator ;
 
 #instantiate the harness
 $formatter = Inflectra::SpiraTest::Addons::Formatter::SpiraConsole -> new;
-my $harness = Inflectra::SpiraTest::Addons::SpiraHarness::Harness->new({ aggregator_class => "Inflectra::SpiraTest::Addons::Aggregator::SpiraAggregator" });
-#my $harness = TAP::Harness->new({ formatter => $formatter, aggregator_class => "Inflectra::SpiraTest::Addons::Aggregator::SpiraAggregator" });
+my $harness = Inflectra::SpiraTest::Addons::SpiraHarness::Harness->new;
 
 #define the list of tests and their SpiraTest Mapping
 #Hash is of the format: TestFile => Test Case ID

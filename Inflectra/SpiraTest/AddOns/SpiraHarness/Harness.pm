@@ -25,9 +25,10 @@ sub _initialize
 {
   my ($self, $arg_for) = @_;
   
-  #automatically add the Spira Test formatter
+  #automatically add the Spira Test formatter and aggregator
   my $formatter = Inflectra::SpiraTest::Addons::Formatter::SpiraConsole -> new;
   $arg_for->{"formatter"} = $formatter;
+  $arg_for->{"aggregator_class"} = "Inflectra::SpiraTest::Addons::Aggregator::SpiraAggregator";
   $self->SUPER::_initialize($arg_for);
 }
 
