@@ -49,7 +49,7 @@ sub open_test {
     my $class
       = $self->jobs > 1
       ? 'TAP::Formatter::Console::ParallelSession'
-      : 'Inflectra::SpiraTest::Addons::Formatter::SpiraConsole::Session';
+      : 'Inflectra::SpiraTest::Addons::Formatter::Console::Session';
 
     eval "require $class";
     $self->_croak($@) if $@;

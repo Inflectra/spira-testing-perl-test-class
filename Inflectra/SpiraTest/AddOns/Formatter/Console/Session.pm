@@ -1,4 +1,4 @@
-package TAP::Formatter::Console::Session;
+package Inflectra::SpiraTest::Addons::Formatter::Console::Session;
 
 use strict;
 use TAP::Formatter::Session;
