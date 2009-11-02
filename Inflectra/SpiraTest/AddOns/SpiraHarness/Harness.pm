@@ -38,37 +38,19 @@ sub runtests
 
   #convert the hash of spiratest test cases to a plain array that the TAP framework expects
   my @tests = ();
-  while ( my ($test_file, $test_case_id) = each(%$test_hashref) )
+  my $test_file;
+  foreach $test_file (keys %$test_hashref) 
   {
     push(@tests, $test_file);
   }
+  
+  #add a copy of the test hashref to the formatter
+  my $formatter = $self->{"formatter"};
+  $formatter->{"test_reference"} = $test_hashref;
 
   #now call the base-class functionality
   my $aggregate = $self->SUPER::runtests(@tests);
   return $aggregate;
-}
-
-sub runtests2
-{
-    my ( $self, $test_hashref ) = @_;
-
-    #convert the hash of spiratest test cases to a plain array that the TAP framework expects
-    my @tests = ();
-    while ( my ($test_file, $test_case_id) = each(%$test_hashref) )
-    {
-        push(@tests, $test_file);
-    }
-
-    my $aggregate = $self->SUPER::_construct( $self->aggregator_class );
-
-    $self->SUPER::_make_callback( 'before_runtests', $aggregate );
-    $aggregate->start;
-    $self->SUPER::aggregate_tests( $aggregate, @tests );
-    $aggregate->stop;
-    $self->SUPER::summary($aggregate);
-    $self->SUPER::_make_callback( 'after_runtests', $aggregate );
-
-    return $aggregate;
 }
 
 1;

@@ -79,11 +79,16 @@ sub summary
   $self->_output("\nSending Results to SpiraTest\n");
   $self->_output("----------------------------\n");
   
+  #get the reference to the test case id lookup hashref
+  my $test_reference = $self->{"test_reference"};
+
   #iterate through all the results from the SpiraTest dictionary
-  my $testStatuses = $aggregate->{"testStatuses"};
-  while ( my ($test_name, $execution_status) = each(%$testStatuses) )
+  my $test_statuses = $aggregate->{"testStatuses"};
+  while ( my ($test_name, $execution_status) = each(%$test_statuses))
   {
-    $self->_output("$test_name has status = $execution_status\n");
+    #get the test case id from the test reference hashref
+    my $test_case_id = $test_reference->{$test_name};
+    $self->_output("Test Case TC000$test_case_id has status = $execution_status\n");
   }
 }
 
