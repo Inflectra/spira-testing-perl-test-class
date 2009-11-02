@@ -47,6 +47,10 @@ sub runtests
   #add a copy of the test hashref to the formatter
   my $formatter = $self->{"formatter"};
   $formatter->{"test_reference"} = $test_hashref;
+  
+  #pass the custom spiratest parameters to the formatter
+  my $spira_args = $self->{"spira_args"};
+  $formatter->{"spira_args"} = $spira_args;
 
   #now call the base-class functionality
   my $aggregate = $self->SUPER::runtests(@tests);

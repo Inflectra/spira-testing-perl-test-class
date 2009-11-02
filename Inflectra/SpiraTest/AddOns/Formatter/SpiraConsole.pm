@@ -1,6 +1,7 @@
 package Inflectra::SpiraTest::Addons::Formatter::SpiraConsole;
 
 use strict;
+use Inflectra::SpiraTest::Addons::Formatter::SpiraExecute;
 use base qw(TAP::Formatter::Console);
 use POSIX qw(strftime);
 
@@ -47,9 +48,7 @@ sub open_test {
     my ( $self, $test, $parser ) = @_;
 
     my $class
-      = $self->jobs > 1
-      ? 'TAP::Formatter::Console::ParallelSession'
-      : 'Inflectra::SpiraTest::Addons::Formatter::Console::Session';
+      = "Inflectra::SpiraTest::Addons::Formatter::Console::Session";
 
     eval "require $class";
     $self->_croak($@) if $@;
@@ -79,8 +78,12 @@ sub summary
   $self->_output("\nSending Results to SpiraTest\n");
   $self->_output("----------------------------\n");
   
-  #get the reference to the test case id lookup hashref
+  #get the reference to the test case id lookup hashref and the custom args
   my $test_reference = $self->{"test_reference"};
+  my $spira_args = $self->{"spira_args"};
+  
+  #instantiate the spiratest execute object
+  my $spira_test_execute = Inflectra::SpiraTest::Addons::Formatter::SpiraExecute->new($spira_args);
 
   #iterate through all the results from the SpiraTest dictionary
   my $test_statuses = $aggregate->{"testStatuses"};
@@ -89,6 +92,7 @@ sub summary
     #get the test case id from the test reference hashref
     my $test_case_id = $test_reference->{$test_name};
     $self->_output("Test Case TC000$test_case_id has status = $execution_status\n");
+    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $execution_status);
   }
 }
 
