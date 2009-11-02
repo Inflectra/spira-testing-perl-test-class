@@ -65,30 +65,33 @@ sub record_test_run
   #create the full url to the web service
   my $wsdl_url = $self->{"base_url"} . WEB_SERVICE_URL_SUFFIX . "?WSDL";
   
-  #get the SOAP parameters as local variables
-  my $user_name = $self->{"user_name"};
-  my $password = $self->{"password"};
-  my $project_id = $self->{"project_id"};
-  my $tester_user_id = -1;  #use the authenticated user
-  my $release_id = $self->{"release_id"};
-  my $test_set_id = $self->{"test_set_id"};
-  my $start_date = "2008-04-28T08:00:00"; #time;
-  my $end_date = "2008-04-28T08:00:00"; #time;
-  my $runner_name = "Perl::TAP";
-  my $runner_test_name = "test1";
-  my $runner_assert_count = 0;
-  my $runner_message  = "test2";
-  my $runner_stack_trace = "test3";
-  
-  #call the soap url passing the parameters
-  my $test_run_id = SOAP::Lite
+  #instantiate the SOAP::lite class
+  my $soap = SOAP::Lite
     -> uri (WEB_SERVICE_NAMESPACE)
-    -> proxy ($wsdl_url)
-    -> TestRun_RecordAutomated2(
-          $user_name,$password,$project_id,$tester_user_id,$test_case_id,$release_id,$test_set_id,
-          $start_date,$end_date,$execution_status,$runner_name,$runner_test_name,
-          $runner_assert_count, $runner_message, $runner_stack_trace);
-					
+    -> on_action(sub{sprintf '%s%s', @_ })
+    ->use_prefix(0)
+    -> proxy ($wsdl_url);
+  
+  #create the SOAP parameter data
+  my $params = SOAP::Data->value(
+    SOAP::Data->name("userName" => $self->{"user_name"}),
+    SOAP::Data->name("password" => $self->{"password"}),
+    SOAP::Data->name("projectId" => $self->{"project_id"}),
+    SOAP::Data->name("testerUserId" => -1),
+    SOAP::Data->name("testCaseId" => $test_case_id),
+    SOAP::Data->name("releaseId" => $self->{"release_id"}),
+    SOAP::Data->name("testSetId" => $self->{"test_set_id"}),
+    SOAP::Data->name("startDate" => "2008-04-28T08:00:00"),
+    SOAP::Data->name("endDate" => "2008-04-28T08:00:00"),
+    SOAP::Data->name("executionStatusId" => $execution_status),
+    SOAP::Data->name("runnerName" => "Perl::TAP"),
+    SOAP::Data->name("runnerTestName" => "test1"),
+    SOAP::Data->name("runnerAssertCount" => 0),
+    SOAP::Data->name("runnerMessage"  => "test2"),
+    SOAP::Data->name("runnerStackTrace" => "test3"));
+  
+  #call the soap method passing the parameters
+  my $test_run_id = $soap->TestRun_RecordAutomated2( $params );
   print("Successfully recorded test run TR000$test_run_id for test case TC000$test_case_id\n");
   return $test_run_id;
 }
