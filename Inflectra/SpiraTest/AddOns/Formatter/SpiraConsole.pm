@@ -92,7 +92,7 @@ sub summary
     #get the test case id from the test reference hashref
     my $test_case_id = $test_reference->{$test_name};
     $self->_output("Test Case TC000$test_case_id has status = $execution_status\n");
-    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $execution_status);
+    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, 0, "", "");
   }
 }
 

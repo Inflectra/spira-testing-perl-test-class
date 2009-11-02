@@ -1,12 +1,13 @@
 package Inflectra::SpiraTest::Addons::Formatter::SpiraExecute;
 
 use strict;
-use SOAP::Lite +trace => 'all';
+use SOAP::Lite;     # +trace => 'all';
 use vars qw($VERSION);
 
 #SpiraTest web service constants
 use constant WEB_SERVICE_NAMESPACE => "http://www.inflectra.com/SpiraTest/Services/v2.2/";
 use constant WEB_SERVICE_URL_SUFFIX => "/Services/v2_2/ImportExport.asmx";
+use constant SPIRA_RUNNER_NAME => "Perl::TAP";
 
 =head1 NAME
 
@@ -60,7 +61,7 @@ sub _initialize
 #records a single test event
 sub record_test_run
 {
-  my ( $self, $test_case_id, $execution_status ) = @_;
+  my ( $self, $test_case_id, $test_case_name, $execution_status, $assert_count, $message, $stack_trace ) = @_;
 
   #create the full url to the web service
   my $wsdl_url = $self->{"base_url"} . WEB_SERVICE_URL_SUFFIX . "?WSDL";
@@ -84,11 +85,11 @@ sub record_test_run
     SOAP::Data->name("startDate" => "2008-04-28T08:00:00"),
     SOAP::Data->name("endDate" => "2008-04-28T08:00:00"),
     SOAP::Data->name("executionStatusId" => $execution_status),
-    SOAP::Data->name("runnerName" => "Perl::TAP"),
-    SOAP::Data->name("runnerTestName" => "test1"),
-    SOAP::Data->name("runnerAssertCount" => 0),
-    SOAP::Data->name("runnerMessage"  => "test2"),
-    SOAP::Data->name("runnerStackTrace" => "test3"));
+    SOAP::Data->name("runnerName" => SPIRA_RUNNER_NAME),
+    SOAP::Data->name("runnerTestName" => $test_case_name),
+    SOAP::Data->name("runnerAssertCount" => $assert_count),
+    SOAP::Data->name("runnerMessage"  => $message),
+    SOAP::Data->name("runnerStackTrace" => $stack_trace));
   
   #call the soap method passing the parameters
   my $test_run_id = $soap->TestRun_RecordAutomated2( $params );
