@@ -87,12 +87,31 @@ sub summary
 
   #iterate through all the results from the SpiraTest dictionary
   my $test_statuses = $aggregate->{"testStatuses"};
+  my $assert_counts = $aggregate->{"assertCounts"};
+  my $test_messages = $aggregate->{"testMessages"};
+  my $stack_traces = $aggregate->{"stackTraces"};
   while ( my ($test_name, $execution_status) = each(%$test_statuses))
   {
     #get the test case id from the test reference hashref
     my $test_case_id = $test_reference->{$test_name};
     $self->_output("Test Case TC000$test_case_id has status = $execution_status\n");
-    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, 0, "", "");
+    #get the other test information
+    my $assert_count = 0;
+    if (defined $assert_counts->{$test_name})
+    {
+      $assert_count =$assert_counts->{$test_name};
+    }
+    my $test_message = "";
+    if (defined $test_messages->{$test_name})
+    {
+      $test_message =$test_messages->{$test_name};
+    }
+    my $stack_trace = "";
+    if (defined $stack_traces->{$test_name})
+    {
+      $stack_trace =$stack_traces->{$test_name};
+    }
+    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, $assert_count, $test_message, $stack_trace);
   }
 }
 
