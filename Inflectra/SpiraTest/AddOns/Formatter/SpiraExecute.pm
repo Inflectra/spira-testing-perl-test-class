@@ -67,8 +67,8 @@ sub record_test_run
   my $wsdl_url = $self->{"base_url"} . WEB_SERVICE_URL_SUFFIX . "?WSDL";
   
   #convert the times into SOAP datetime's
-  $start_date = "2008-04-28T08:00:00";
-  $end_date = "2008-04-28T08:00:00";
+  my $start_date = SOAP::Utils::format_datetime(gmtime($start_time));
+  my $end_date = SOAP::Utils::format_datetime(gmtime($end_time));
   
   #instantiate the SOAP::lite class
   my $soap = SOAP::Lite

@@ -109,8 +109,9 @@ sub summary
     {
       $stack_trace =$stack_traces->{$test_name};
     }
-    my $start_time = $aggregate->{start_time};
-    my $end_time = $aggregate->{end_time};
+    #the time values from the aggregator are not reliable, so just use current date/time for now
+    my $start_time = time;
+    my $end_time = time;
     my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, $start_time, $end_time, $assert_count, $test_message, $stack_trace);
   }
 }
