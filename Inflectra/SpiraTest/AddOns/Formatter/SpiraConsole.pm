@@ -101,17 +101,17 @@ sub summary
     {
       $assert_count =$assert_counts->{$test_name};
     }
-    my $test_message = "";
-    if (defined $test_messages->{$test_name})
-    {
-      $test_message =$test_messages->{$test_name};
-    }
+    #there isn't really a message equivalent, so just use the test name
+    my $test_message = $test_name;
+
     my $stack_trace = "";
     if (defined $stack_traces->{$test_name})
     {
       $stack_trace =$stack_traces->{$test_name};
     }
-    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, $assert_count, $test_message, $stack_trace);
+    my $start_time = $aggregate->{start_time};
+    my $end_time = $aggregate->{end_time};
+    my $test_run_id = $spira_test_execute->record_test_run($test_case_id, $test_name, $execution_status, $start_time, $end_time, $assert_count, $test_message, $stack_trace);
   }
 }
 

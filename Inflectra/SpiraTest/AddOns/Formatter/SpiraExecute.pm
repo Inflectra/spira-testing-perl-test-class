@@ -61,10 +61,14 @@ sub _initialize
 #records a single test event
 sub record_test_run
 {
-  my ( $self, $test_case_id, $test_case_name, $execution_status, $assert_count, $message, $stack_trace ) = @_;
+  my ( $self, $test_case_id, $test_case_name, $execution_status, $start_time, $end_time, $assert_count, $message, $stack_trace ) = @_;
 
   #create the full url to the web service
   my $wsdl_url = $self->{"base_url"} . WEB_SERVICE_URL_SUFFIX . "?WSDL";
+  
+  #convert the times into SOAP datetime's
+  $start_date = "2008-04-28T08:00:00";
+  $end_date = "2008-04-28T08:00:00";
   
   #instantiate the SOAP::lite class
   my $soap = SOAP::Lite
@@ -82,8 +86,8 @@ sub record_test_run
     SOAP::Data->name("testCaseId" => $test_case_id),
     SOAP::Data->name("releaseId" => $self->{"release_id"}),
     SOAP::Data->name("testSetId" => $self->{"test_set_id"}),
-    SOAP::Data->name("startDate" => "2008-04-28T08:00:00"),
-    SOAP::Data->name("endDate" => "2008-04-28T08:00:00"),
+    SOAP::Data->name("startDate" => $start_date),
+    SOAP::Data->name("endDate" => $end_date),
     SOAP::Data->name("executionStatusId" => $execution_status),
     SOAP::Data->name("runnerName" => SPIRA_RUNNER_NAME),
     SOAP::Data->name("runnerTestName" => $test_case_name),

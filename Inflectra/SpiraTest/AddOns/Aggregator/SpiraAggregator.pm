@@ -88,7 +88,6 @@ sub _initialize {
     #initialize the spiratest result dictionaries
     $self->{"testStatuses"} = {};
     $self->{"assertCounts"} = {};
-    $self->{"testMessages"} = {};
     $self->{"stackTraces"} = {};
     return $self;
 }
@@ -123,10 +122,6 @@ sub add
     #get the SpiraTest test case id and execution status from the TAP results
     my $testStatuses = $self->{"testStatuses"};
     my $assert_counts = $self->{"assertCounts"};
-    #my $test_messages = $self->{"testMessages"};
-    #my $stack_traces = $self->{"stackTraces"};
-    #$test_messages->{$description} = $self->get_status;
-    #$stack_traces->{$description} = $parser->results[0]->raw;
     
     my $executionStatusId = EXECUTION_STATUS_ID_NOT_RUN;
     if ($parser->actual_failed > 0)
