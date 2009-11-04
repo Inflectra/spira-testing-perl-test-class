@@ -3,9 +3,10 @@
 	
 	<target name="zipup" description="Zips up the whole application for deployment">
 		<echo message="Zipping up entire application" />
-		<zip zipfile="RubyTestUnitRunner.zip" verbose="true" comment="Ruby Test::Unit Runner for SpiraTest">
+		<zip zipfile="PerlTAPExtension.zip" verbose="true" comment="Perl TAP::Harness Extension for SpiraTest">
 			<fileset>
-				<include name="*.rb" />
+				<include name="*.pl" />
+				<include name="*.pm" />
 				<include name="*.txt" />
 			</fileset>
 		</zip>
